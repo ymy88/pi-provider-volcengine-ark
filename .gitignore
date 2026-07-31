@@ -1,0 +1,19 @@
+# Node
+node_modules/
+*.log
+npm-debug.log*
+*.tgz
+
+# local-only: publish to official registry (don't commit — could hold a token someday)
+.npmrc
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# local pi runtime artifacts (if anyone runs pi in this dir)
+.pi/
+.venv/
+dist/
