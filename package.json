@@ -1,8 +1,11 @@
 {
   "name": "pi-provider-volcengine-ark",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "pi provider extension for Volcengine Ark (火山方舟, OpenAI-compatible coding endpoint)",
-  "keywords": ["pi-package", "pi-provider"],
+  "keywords": [
+    "pi-package",
+    "pi-provider"
+  ],
   "license": "MIT",
   "author": {
     "name": "ymy88",
@@ -17,9 +20,15 @@
     "url": "https://github.com/ymy88/pi-provider-volcengine-ark/issues"
   },
   "type": "module",
-  "files": ["index.ts", "README.md", "LICENSE"],
+  "files": [
+    "index.ts",
+    "README.md",
+    "LICENSE"
+  ],
   "pi": {
-    "extensions": ["./index.ts"]
+    "extensions": [
+      "./index.ts"
+    ]
   },
   "peerDependencies": {
     "@earendil-works/pi-coding-agent": "*"
