@@ -17,9 +17,11 @@
  * `compat` is honored. So the shared compat fields live in BASE_COMPAT below and
  * are spread into every model's `compat`.
  *
- * Thinking: only the "high" level is exposed.
- *   - kimi toggle models        -> thinkingFormat "qwen" (enable_thinking)
- *   - deepseek-v4 effort models -> thinkingFormat "deepseek" + reasoning_effort
+ * Thinking:
+ *   - kimi toggle models        -> thinkingFormat "qwen" (enable_thinking), high only
+ *   - deepseek-v4 effort models -> thinkingFormat "deepseek" + reasoning_effort, high only
+ *   - glm-5.3                   -> plain reasoning_effort low/medium/high/max (verified on
+ *                                  Ark: always thinks, cannot be disabled; "low" ~ off)
  *   - glm-5.2 / minimax         -> no thinking param; reasoning_content captured
  *
  * Usage:
@@ -47,6 +49,18 @@ const HIGH_ONLY = {
   max: null,
 } as const;
 
+// glm-5.3 on Ark accepts plain reasoning_effort low/medium/high/max (verified).
+// Thinking cannot be disabled; "low" produces near-zero reasoning, so off -> "low".
+const GLM53_EFFORT = {
+  off: "low",
+  minimal: "low",
+  low: "low",
+  medium: "medium",
+  high: "high",
+  xhigh: "max",
+  max: "max",
+} as const;
+
 export default function (pi: ExtensionAPI) {
   pi.registerProvider("volcengine-ark", {
     name: "Volcengine Ark",
@@ -54,6 +68,17 @@ export default function (pi: ExtensionAPI) {
     apiKey: "$ARK_API_KEY",
     api: "openai-completions",
     models: [
+      {
+        id: "glm-5.3",
+        name: "GLM-5.3",
+        reasoning: true,
+        input: ["text"],
+        cost: { input: 1.1, output: 3.851, cacheRead: 0.275, cacheWrite: 0 },
+        contextWindow: 1_000_000,
+        maxTokens: 128_000,
+        thinkingLevelMap: GLM53_EFFORT,
+        compat: { ...BASE_COMPAT, supportsReasoningEffort: true },
+      },
       {
         id: "glm-5.2",
         name: "GLM-5.2",
