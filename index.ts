@@ -7,10 +7,11 @@
  * Model parameters mirror the Alibaba Bailian entry (context window / output /
  * pricing / reasoning behavior are the same hosted models, per request). The
  * only differences are the endpoint, the env var, the lower-case model IDs
- * (and kimi-k2.6 / minimax-m* use plain IDs without a lab prefix on Ark), and
- * maxTokens capped at 128000 — Ark rejects max_tokens above that value with a
- * 400 InvalidParameter error, even for models whose official output limit is
- * larger.
+ * (and kimi-k2.6 / minimax-m* use plain IDs without a lab prefix on Ark).
+ * maxTokens per model verified against the endpoint (a too-large max_tokens
+ * returns 400 InvalidParameter naming the exact cap):
+ *   glm-5.3 / glm-5.2 128000, deepseek-v4-* 393216, minimax-m* 131072,
+ *   kimi-k2.7-code / kimi-k2.6 32768.
  *
  * IMPORTANT: pi's extension config form (pi.registerProvider(name, {models}))
  * does NOT merge provider-level `compat` into each model — only per-model
@@ -97,7 +98,7 @@ export default function (pi: ExtensionAPI) {
         input: ["text", "image"],
         cost: { input: 0.73, output: 3.5, cacheRead: 0.15, cacheWrite: 0 },
         contextWindow: 262_144,
-        maxTokens: 128_000,
+        maxTokens: 32_768,
         thinkingLevelMap: HIGH_ONLY,
         compat: { ...BASE_COMPAT, thinkingFormat: "qwen", supportsReasoningEffort: false },
       },
@@ -108,7 +109,7 @@ export default function (pi: ExtensionAPI) {
         input: ["text"],
         cost: { input: 0.435, output: 0.87, cacheRead: 0.003625, cacheWrite: 0 },
         contextWindow: 1_000_000,
-        maxTokens: 128_000,
+        maxTokens: 393_216,
         thinkingLevelMap: HIGH_ONLY,
         compat: { ...BASE_COMPAT, thinkingFormat: "deepseek", supportsReasoningEffort: true },
       },
@@ -119,7 +120,7 @@ export default function (pi: ExtensionAPI) {
         input: ["text"],
         cost: { input: 0.14, output: 0.28, cacheRead: 0.0028, cacheWrite: 0 },
         contextWindow: 1_000_000,
-        maxTokens: 128_000,
+        maxTokens: 393_216,
         thinkingLevelMap: HIGH_ONLY,
         compat: { ...BASE_COMPAT, thinkingFormat: "deepseek", supportsReasoningEffort: true },
       },
@@ -130,7 +131,7 @@ export default function (pi: ExtensionAPI) {
         input: ["text", "image"],
         cost: { input: 0.3, output: 1.2, cacheRead: 0.06, cacheWrite: 0 },
         contextWindow: 512_000,
-        maxTokens: 128_000,
+        maxTokens: 131_072,
         thinkingLevelMap: HIGH_ONLY,
         compat: { ...BASE_COMPAT, supportsReasoningEffort: false },
       },
@@ -141,7 +142,7 @@ export default function (pi: ExtensionAPI) {
         input: ["text"],
         cost: { input: 0.3, output: 1.2, cacheRead: 0.06, cacheWrite: 0.375 },
         contextWindow: 204_800,
-        maxTokens: 128_000,
+        maxTokens: 131_072,
         thinkingLevelMap: HIGH_ONLY,
         compat: { ...BASE_COMPAT, supportsReasoningEffort: false },
       },
@@ -152,7 +153,7 @@ export default function (pi: ExtensionAPI) {
         input: ["text", "image"],
         cost: { input: 0.929, output: 3.858, cacheRead: 0, cacheWrite: 0 },
         contextWindow: 262_144,
-        maxTokens: 16_384,
+        maxTokens: 32_768,
         thinkingLevelMap: HIGH_ONLY,
         compat: { ...BASE_COMPAT, thinkingFormat: "qwen", supportsReasoningEffort: false },
       },
