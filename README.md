@@ -26,16 +26,22 @@ Then in pi: run `/reload` (or restart pi), then pick a model with `/model` → `
 
 | Model ID | Input | Context | Output | Notes |
 | --- | --- | --- | --- | --- |
+| `doubao-seed-2.1-pro` | text+image | 1M | 262k | thinking toggle + effort |
+| `doubao-seed-2.1-lite` | text+image | 1M | 262k | thinking toggle + effort |
+| `doubao-seed-2.0-mini` | text+image | 262k | 131k | thinking toggle + effort |
+| `doubao-seed-evolving` | text+image | 1M | 262k | thinking toggle + effort, weekly-updated |
+| `deepseek-v4-pro` | text | 1M | 384k | thinking toggle, effort high |
+| `deepseek-v4-flash` | text | 1M | 384k | thinking toggle, effort high |
+| `deepseek-v4.1-flash` | text+image | 1M | 384k | thinking toggle, effort high |
+| `kimi-k3` | text+image | 1M | 131k | thinking toggle + effort |
+| `kimi-k2.7-code` | text+image | 262k | 32k | always thinks, reasoning captured |
 | `glm-5.3` | text | 1M | 128k | reasoning_effort low..max (low ≈ off) |
-| `glm-5.2` | text | 1M | 128k | no toggle, reasoning captured |
-| `kimi-k2.7-code` | text+image | 262k | 32k | thinking toggle (qwen) |
-| `deepseek-v4-pro` | text | 1M | 384k | effort-based thinking (deepseek) |
-| `deepseek-v4-flash` | text | 1M | 384k | effort-based thinking (deepseek) |
-| `minimax-m3` | text+image | 512k | 128k | no toggle, reasoning captured |
-| `minimax-m2.7` | text | 205k | 128k | no toggle, reasoning captured |
-| `kimi-k2.6` | text+image | 262k | 32k | thinking toggle (qwen) |
+| `glm-5.3-flash` | text+image | 1M | 131k | reasoning_effort low..max (low ≈ off) |
+| `minimax-m3` | text+image | 512k | 131k | always thinks, reasoning captured |
 
-Only the `high` thinking level is exposed for kimi/deepseek models (per request). `glm-5.3` accepts `reasoning_effort` `low`/`medium`/`high`/`max` (thinking cannot be disabled; `low` ≈ off). Per-model `max_tokens` caps on Ark (verified via the endpoint's `InvalidParameter` error): glm 128000, deepseek-v4 393216, minimax 131072, kimi 32768.
+All model facts were verified against the live endpoint (2026-09): `max_tokens` caps via the endpoint's `InvalidParameter` error, context windows and input modalities via `GET /models` plus image probes, and thinking parameters via behavior diffs. `glm-5.2`, `kimi-k2.6`, and `minimax-m2.7` were delisted from the coding endpoint and removed.
+
+Doubao, kimi-k3 and deepseek models use Ark's `thinking: {"type": "enabled"|"disabled"}` toggle — `off` genuinely disables thinking. `kimi-k2.7-code` no longer honors `enable_thinking` (thinking stays on), so it's configured as always-thinking with reasoning captured. Per-model `max_tokens` caps: glm 128000/131072, deepseek-v4* 393216, minimax 131072, kimi 32768/131072, doubao 131072/262144.
 
 ## How it works
 

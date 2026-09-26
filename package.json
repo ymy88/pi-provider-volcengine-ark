@@ -1,6 +1,6 @@
 {
   "name": "pi-provider-volcengine-ark",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "pi provider extension for Volcengine Ark (火山方舟, OpenAI-compatible coding endpoint)",
   "keywords": [
     "pi-package",
